@@ -67,11 +67,19 @@
                 'endpoint': 'specific URL where an API can be accessed',
                 
                 // System Issues & Debugging
+                'connection refused by host': 'the server is up but not accepting your request',
+                'connection refused': 'the server rejected your attempt to connect',
+                'connection timeout': 'took too long to connect to the server',
+                'network unreachable': 'can\'t find a path to connect to the server',
+                'host not found': 'the server address doesn\'t exist or can\'t be found',
+                'permission denied': 'you don\'t have the right access to do that',
+                'access denied': 'you\'re not allowed to access that resource',
                 'deadlock': 'situation where two processes are stuck waiting for each other',
                 'race condition': 'bug that occurs when timing of events affects the outcome',
                 'memory leak': 'bug where the program uses more and more memory over time',
                 'stack overflow': 'error when the program runs out of memory for function calls',
                 'null pointer': 'error when trying to use a memory address that doesn\'t exist',
+                'segmentation fault': 'program tried to access memory it shouldn\'t have',
                 'timeout': 'when a process takes too long and gets cancelled',
                 'bottleneck': 'the slowest part of a system that limits overall performance',
                 'resource lock': 'mechanism to prevent multiple processes from accessing the same resource',
@@ -81,6 +89,8 @@
                 'daemon': 'background process that runs continuously',
                 'cron': 'time-based job scheduler',
                 'webhook': 'way for one system to notify another when something happens',
+                'IndexError': 'tried to access a list item that doesn\'t exist',
+                'list index out of range': 'tried to get an item from a position that doesn\'t exist in the list',
                 
                 // Performance & Monitoring
                 'CPU throttling': 'reducing processor speed to prevent overheating',
@@ -141,8 +151,11 @@
             
             let translation = input;
             
+            // Sort translations by length (longest first) to handle multi-word phrases correctly
+            const sortedTranslations = Object.entries(translations).sort((a, b) => b[0].length - a[0].length);
+            
             // Apply translations
-            for (let [jargon, meaning] of Object.entries(translations)) {
+            for (let [jargon, meaning] of sortedTranslations) {
                 const regex = new RegExp('\\b' + jargon.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
                 translation = translation.replace(regex, meaning);
             }
