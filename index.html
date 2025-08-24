@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Jargon Translator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        textarea { width: 100%; height: 200px; margin: 10px 0; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Dev Jargon Translator</h1>
+    <p>Translating tribal dev language for better cross-functional collaboration</p>
+    
+    <textarea id="devInput" placeholder="Enter dev jargon here..."></textarea>
+    <button id="translateBtn">Translate</button>
+    <textarea id="translatedOutput" placeholder="Plain English translation will appear here..." readonly></textarea>
+
+    <script>
+        function translate() {
+            const input = document.getElementById('devInput').value;
+            const output = document.getElementById('translatedOutput');
+            
+            console.log('Input:', input); // Debug
+            
+            if (!input.trim()) {
+                output.value = 'Please enter some dev jargon to translate!';
+                return;
+            }
+            
+            // Comprehensive dev jargon dictionary
+            const translations = {
+                // Basic Development Terms
+                'API': 'Application Programming Interface (way for programs to talk to each other)',
+                'deploy': 'publish the code to make it live',
+                'deployment': 'publishing the code to make it live',
+                'refactor': 'clean up and improve existing code',
+                'bug': 'error or problem in the code',
+                'sprint': 'short work period (usually 2 weeks)',
+                'standup': 'quick daily team meeting',
+                'repo': 'code repository (where code is stored)',
+                'repository': 'place where code is stored',
+                'push': 'upload code changes',
+                'pull request': 'request to review and merge code changes',
+                'PR': 'pull request (request to review and merge code changes)',
+                'merge': 'combine code changes together',
+                'branch': 'separate version of the code for working on features',
+                'commit': 'save a set of code changes',
+                
+                // Infrastructure & Operations
+                'pod': 'containerized application instance',
+                'OOMKilled': 'Out Of Memory Killed (app was shut down for using too much memory)',
+                'memory limit': 'maximum amount of RAM the app is allowed to use',
+                'container': 'packaged application with all its dependencies',
+                'microservice': 'small, independent part of a larger application',
+                'load balancer': 'system that distributes incoming requests across multiple servers',
+                'database': 'organized collection of data',
+                'cache': 'temporary storage for frequently used data',
+                'CDN': 'Content Delivery Network (servers worldwide that serve content faster)',
+                'CI/CD': 'Continuous Integration/Continuous Deployment (automated testing and deployment)',
+                'DevOps': 'practices that combine software development and IT operations',
+                'scalability': 'ability to handle increased load',
+                'latency': 'delay between request and response',
+                'throughput': 'amount of work completed in a given time',
+                'endpoint': 'specific URL where an API can be accessed',
+                
+                // System Issues & Debugging
+                'deadlock': 'situation where two processes are stuck waiting for each other',
+                'race condition': 'bug that occurs when timing of events affects the outcome',
+                'memory leak': 'bug where the program uses more and more memory over time',
+                'stack overflow': 'error when the program runs out of memory for function calls',
+                'null pointer': 'error when trying to use a memory address that doesn\'t exist',
+                'timeout': 'when a process takes too long and gets cancelled',
+                'bottleneck': 'the slowest part of a system that limits overall performance',
+                'resource lock': 'mechanism to prevent multiple processes from accessing the same resource',
+                'mutex': 'mutual exclusion lock (prevents multiple threads from accessing shared resource)',
+                'thread': 'lightweight process that can run concurrently with other threads',
+                'process': 'running instance of a program',
+                'daemon': 'background process that runs continuously',
+                'cron': 'time-based job scheduler',
+                'webhook': 'way for one system to notify another when something happens',
+                
+                // Performance & Monitoring
+                'CPU throttling': 'reducing processor speed to prevent overheating',
+                'garbage collection': 'automatic memory cleanup process',
+                'memory fragmentation': 'inefficient use of memory due to scattered free spaces',
+                'profiling': 'analyzing code performance to find slow parts',
+                'benchmarking': 'measuring and comparing performance',
+                'monitoring': 'continuously checking system health and performance',
+                'alerting': 'automatic notifications when something goes wrong',
+                'logging': 'recording what the application does for debugging',
+                'metrics': 'measurable data about system performance',
+                
+                // Architecture & Design
+                'monolith': 'single large application containing all functionality',
+                'SOA': 'Service-Oriented Architecture (system built from separate services)',
+                'REST': 'Representational State Transfer (web API design pattern)',
+                'GraphQL': 'query language for APIs that lets you request exactly what you need',
+                'MVC': 'Model-View-Controller (way to organize code into separate concerns)',
+                'CRUD': 'Create, Read, Update, Delete (basic data operations)',
+                'ORM': 'Object-Relational Mapping (translates between database and code objects)',
+                'middleware': 'software that sits between different applications to help them communicate',
+                'proxy': 'server that acts as intermediary between client and another server',
+                'gateway': 'entry point that manages access to backend services',
+                
+                // Security
+                'authentication': 'verifying who someone is',
+                'authorization': 'determining what someone is allowed to do',
+                'OAuth': 'open standard for secure authorization',
+                'JWT': 'JSON Web Token (secure way to transmit information between parties)',
+                'SSL': 'Secure Socket Layer (encryption for web traffic)',
+                'TLS': 'Transport Layer Security (newer version of SSL)',
+                'firewall': 'security system that controls network traffic',
+                'DDoS': 'Distributed Denial of Service (attack that overwhelms a system)',
+                'SQL injection': 'attack that inserts malicious code into database queries',
+                'XSS': 'Cross-Site Scripting (attack that injects malicious scripts into websites)',
+                
+                // Testing
+                'unit test': 'test of individual code components',
+                'integration test': 'test of how different parts work together',
+                'end-to-end test': 'test of complete user workflows',
+                'mock': 'fake version of a component used for testing',
+                'stub': 'simple replacement for a component during testing',
+                'TDD': 'Test-Driven Development (write tests before writing code)',
+                'coverage': 'percentage of code that is tested',
+                
+                // Common Acronyms
+                'SLA': 'Service Level Agreement (promised level of service quality)',
+                'SLO': 'Service Level Objective (specific measurable target for service quality)',
+                'RTO': 'Recovery Time Objective (maximum acceptable downtime)',
+                'RPO': 'Recovery Point Objective (maximum acceptable data loss)',
+                'MTTR': 'Mean Time To Recovery (average time to fix issues)',
+                'MTBF': 'Mean Time Between Failures (average time between breakdowns)',
+                'KPI': 'Key Performance Indicator (important metric to track)',
+                'ROI': 'Return on Investment (value gained vs cost)',
+                'MVP': 'Minimum Viable Product (simplest version that provides value)',
+                'POC': 'Proof of Concept (early test to validate an idea)'
+            };
+            
+            let translation = input;
+            
+            // Apply translations
+            for (let [jargon, meaning] of Object.entries(translations)) {
+                const regex = new RegExp('\\b' + jargon.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+                translation = translation.replace(regex, meaning);
+            }
+            
+            // If no translation occurred, analyze for partial matches and suggestions
+            if (translation === input) {
+                const words = input.toLowerCase().split(/\s+/);
+                const knownTerms = Object.keys(translations).map(t => t.toLowerCase());
+                const suggestions = [];
+                
+                // Find partial matches
+                words.forEach(word => {
+                    const partialMatches = knownTerms.filter(term => 
+                        term.includes(word) || word.includes(term) || 
+                        levenshteinDistance(word, term) <= 2
+                    );
+                    suggestions.push(...partialMatches);
+                });
+                
+                if (suggestions.length > 0) {
+                    const uniqueSuggestions = [...new Set(suggestions)].slice(0, 5);
+                    translation = input + '\n\n💡 Did you mean any of these terms? ' + 
+                        uniqueSuggestions.join(', ') + 
+                        '\n\nOr try terms like: deadlock, race condition, memory leak, timeout, bottleneck';
+                } else {
+                    translation = input + '\n\n(No recognized dev jargon found. Try terms like: deadlock, race condition, API, deploy, pod, OOMKilled, authentication, etc.)';
+                }
+            }
+            
+            // Simple Levenshtein distance for fuzzy matching
+            function levenshteinDistance(str1, str2) {
+                const matrix = [];
+                for (let i = 0; i <= str2.length; i++) {
+                    matrix[i] = [i];
+                }
+                for (let j = 0; j <= str1.length; j++) {
+                    matrix[0][j] = j;
+                }
+                for (let i = 1; i <= str2.length; i++) {
+                    for (let j = 1; j <= str1.length; j++) {
+                        if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                            matrix[i][j] = matrix[i - 1][j - 1];
+                        } else {
+                            matrix[i][j] = Math.min(
+                                matrix[i - 1][j - 1] + 1,
+                                matrix[i][j - 1] + 1,
+                                matrix[i - 1][j] + 1
+                            );
+                        }
+                    }
+                }
+                return matrix[str2.length][str1.length];
+            }
+            
+            output.value = translation;
+            console.log('Translation:', translation); // Debug
+        }
+
+        // Add event listener after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('translateBtn').addEventListener('click', translate);
+        });
+    </script>
+</body>
+</html>
