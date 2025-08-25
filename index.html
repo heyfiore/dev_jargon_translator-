@@ -154,9 +154,11 @@
             // Sort translations by length (longest first) to handle multi-word phrases correctly
             const sortedTranslations = Object.entries(translations).sort((a, b) => b[0].length - a[0].length);
             
-            // Apply translations
+            // Apply translations - using simple case-insensitive replacement
             for (let [jargon, meaning] of sortedTranslations) {
-                const regex = new RegExp('\\b' + jargon.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+                // Create a case-insensitive replacement without word boundaries for phrases with special chars
+                const escapedJargon = jargon.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(escapedJargon, 'gi');
                 translation = translation.replace(regex, meaning);
             }
             
